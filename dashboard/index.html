@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#board">Skip to the board</a>
+<header class="top">
+  <div class="top-inner">
+    <div>
+      <p class="eyebrow">Token Radar · radar-2</p>
+      <h1>Pre-token protocols, ranked by what a launch would be worth</h1>
+      <p class="lede">Every protocol DefiLlama tracks at $5M TVL or more, scored from its own figures. A protocol records no token — never that it has none.</p>
+    </div>
+    <dl class="stats" id="stats"></dl>
+  </div>
+</header>
+<main>
+  <section class="toolbar" aria-label="Board controls">
+    <label>Search <input id="q" type="search" placeholder="Protocol name or slug" autocomplete="off"></label>
+    <label>Category <select id="category"><option value="">All categories</option></select></label>
+    <label>Chain <select id="chain"><option value="">All chains</option></select></label>
+    <label>Min TVL <select id="mintvl">
+      <option value="0">Any TVL</option>
+      <option value="50000000">$50M and up</option>
+      <option value="100000000">$100M and up</option>
+      <option value="500000000">$500M and up</option>
+      <option value="1000000000">$1B and up</option>
+    </select></label>
+    <label class="check"><input id="watchlist" type="checkbox"> Watchlist only</label>
+    <label>Sort <select id="sort">
+      <option value="rank">Implied value</option>
+      <option value="tvl">TVL</option>
+      <option value="growth">7-day growth</option>
+      <option value="age">Age with no token</option>
+    </select></label>
+    <p class="count" id="count" aria-live="polite"></p>
+  </section>
+  <section class="board-wrap" aria-label="Ranked board">
+    <table id="board">
+      <thead><tr>
+        <th data-sort="rank">#</th><th data-sort="rank">Protocol</th><th>Category</th><th>Chains</th>
+        <th data-sort="tvl">TVL</th><th data-sort="growth">7d</th><th data-sort="age">Age</th>
+        <th data-sort="rank">Implied value</th><th>Watchlist</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="hint">Click a row for its detail view and farm plan. Click a column heading to sort.</p>
+  </section>
+  <section class="detail" id="detail" aria-label="Protocol detail" hidden></section>
+  <section class="live" aria-label="Live tokens, kept apart">
+    <h2>Already trading — kept apart, not ranked</h2>
+    <p>These protocols already have a token, so the board shows the market's own value for them, never a model's. The top 24 by market cap.</p>
+    <table id="live"><thead><tr><th>Protocol</th><th>Category</th><th>Chains</th><th>TVL</th><th>Market cap</th><th>7d</th></tr></thead><tbody id="live-rows"></tbody></table>
+  </section>
+  <section class="model" aria-label="How the value is worked out">
+    <h2>How the implied value is worked out</h2>
+    <p>One function scores every protocol. No name is ever special-cased.</p>
+    <pre>implied = TVL × 0.22 × growth × maturity × chains
+growth   = 1 + clamp(7d change, −50%, +150%) × 0.6
+maturity = 0.55 + min(age, 1095 days) ÷ 1095 × 0.45   (age unknown: 365 days)
+chains   = 1 + 0.04 × min(chains − 1, 4)</pre>
+    <p>TVL is size today, seven-day growth is momentum, age with no token is how long the launch option has stayed open, and chain count is how widely the TVL is distributed. The watchlist is the floor, never the ceiling: this board adds the strongest pre-token protocols below the $50M floor, by TVL.</p>
+  </section>
+</main>
+<footer>
+  <p id="source"></p>
+  <p>Implied value is this radar's own claim from the snapshot's figures. It does not predict whether or when a token is issued. Farm steps are a starting point: check the protocol's own page before moving funds, and never pay to claim.</p>
+</footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
